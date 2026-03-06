@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimpleAI — AI That Actually Works For You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F0E8;
+    --ink: #1A1510;
+    --amber: #D47C2A;
+    --amber-light: #F0A94A;
+    --rust: #B85C2A;
+    --sage: #5A7A5A;
+    --paper: #EDE8DC;
+    --line: rgba(26,21,16,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 4rem;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+    z-index: 100;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .logo span { color: var(--amber); }
+
+  .nav-cta {
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    text-decoration: none;
+  }
+
+  .nav-cta:hover { background: var(--amber); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    padding: 7rem 4rem 5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .hero-left {}
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.5rem;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--amber);
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 4.5vw, 4rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    color: var(--ink);
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .hero-body {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: rgba(26,21,16,0.72);
+    font-weight: 300;
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+  }
+
+  /* SIGNUP FORM */
+  .signup-form {
+    display: flex;
+    gap: 0;
+    max-width: 440px;
+  }
+
+  .signup-form input[type="email"] {
+    flex: 1;
+    padding: 0.9rem 1.2rem;
+    border: 1.5px solid var(--ink);
+    border-right: none;
+    border-radius: 2px 0 0 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .signup-form input[type="email"]:focus {
+    background: #fff;
+    border-color: var(--amber);
+  }
+
+  .signup-form input[type="email"]::placeholder {
+    color: rgba(26,21,16,0.38);
+  }
+
+  .signup-form button {
+    background: var(--amber);
+    color: #fff;
+    border: 1.5px solid var(--amber);
+    padding: 0.9rem 1.4rem;
+    border-radius: 0 2px 2px 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .signup-form button:hover { background: var(--rust); border-color: var(--rust); }
+
+  .form-note {
+    margin-top: 0.75rem;
+    font-size: 0.78rem;
+    color: rgba(26,21,16,0.45);
+  }
+
+  /* HERO RIGHT — PERSONA CARD */
+  .persona-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.8s 0.25s ease both;
+  }
+
+  .persona-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--amber), var(--rust));
+  }
+
+  .persona-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.2rem;
+  }
+
+  .persona-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .persona-role {
+    font-size: 0.88rem;
+    color: rgba(26,21,16,0.55);
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+  }
+
+  .persona-quote {
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: rgba(26,21,16,0.78);
+    border-left: 3px solid var(--amber);
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .persona-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    background: rgba(212,124,42,0.12);
+    color: var(--rust);
+    padding: 0.3rem 0.7rem;
+    border-radius: 2px;
+    font-weight: 500;
+    border: 1px solid rgba(212,124,42,0.22);
+  }
+
+  /* DIVIDER */
+  .divider {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 4rem;
+  }
+
+  .divider hr {
+    border: none;
+    border-top: 1px solid var(--line);
+  }
+
+  /* PROBLEM SECTION */
+  .problem {
+    padding: 5rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: var(--amber);
+    opacity: 0.35;
+    line-height: 1;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 2.8vw, 2.4rem);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .problem-item {
+    padding: 1.8rem;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--paper);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .problem-item:hover { transform: translateY(-3px); border-color: var(--amber); }
+
+  .problem-icon {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .problem-item h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .problem-item p {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: rgba(26,21,16,0.65);
+    font-weight: 300;
+  }
+
+  /* VALUE PROP */
+  .value {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 5rem 4rem;
+  }
+
+  .value-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .value h2 { color: var(--cream); }
+  .value .section-number { color: var(--amber-light); }
+
+  .value-prop-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .value-prop-list li {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(245,240,232,0.78);
+    font-weight: 300;
+  }
+
+  .value-prop-list li::before {
+    content: '→';
+    color: var(--amber-light);
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .value-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .comparison-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .comparison-box {
+    padding: 1.2rem 1.4rem;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .comparison-box.before {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(245,240,232,0.5);
+  }
+
+  .comparison-box.after {
+    background: rgba(212,124,42,0.18);
+    border: 1px solid rgba(212,124,42,0.35);
+    color: rgba(245,240,232,0.9);
+  }
+
+  .comparison-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
+  }
+
+  .comparison-box.after .comparison-label { color: var(--amber-light); opacity: 1; }
+
+  /* BOTTOM CTA */
+  .bottom-cta {
+    padding: 6rem 4rem;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .bottom-cta h2 {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    margin-bottom: 1.2rem;
+  }
+
+  .bottom-cta p {
+    font-size: 1.05rem;
+    color: rgba(26,21,16,0.62);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+  }
+
+  .bottom-cta .signup-form {
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    color: rgba(26,21,16,0.45);
+  }
+
+  /* SUCCESS STATE */
+  .form-success {
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1.4rem;
+    background: rgba(90,122,90,0.12);
+    border: 1.5px solid var(--sage);
+    border-radius: 2px;
+    color: var(--sage);
+    font-size: 0.92rem;
+    font-weight: 500;
+    max-width: 440px;
+  }
+
+  .form-success.visible { display: flex; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; padding: 4rem 1.5rem 3rem; gap: 2.5rem; }
+    .problem { padding: 3.5rem 1.5rem; }
+    .problem-grid { grid-template-columns: 1fr; }
+    .value { padding: 3.5rem 1.5rem; }
+    .value-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .bottom-cta { padding: 4rem 1.5rem; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    .divider { padding: 0 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Simple<span>AI</span></div>
+  <a href="#signup" class="nav-cta">Join the waitlist</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">Early access</div>
+    <h1>AI tools built for the rest of <em>us</em></h1>
+    <p class="hero-body">
+      Millions of smart, capable people are being left behind by AI — not because they can't use it, but because today's tools were built for developers and tech-savvy early adopters. SimpleAI changes that.
+    </p>
+    <form class="signup-form" id="heroForm" action="https://formspree.io/f/xnnpwqkv" method="POST">
+      <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+      <button type="submit">Get early access</button>
+    </form>
+    <div class="form-success" id="heroSuccess">✓ You're on the list — we'll be in touch soon!</div>
+    <p class="form-note">No spam. Unsubscribe anytime. ~200 people already signed up.</p>
+  </div>
+
+  <div class="persona-card">
+    <div class="persona-label">Target user persona</div>
+    <div class="persona-name">Margaret, 58</div>
+    <div class="persona-role">Owner, Coastal Cleaning Co. · Victoria, BC</div>
+    <p class="persona-quote">
+      "I keep hearing AI can write emails and handle customer questions, but every time I try it, I spend an hour figuring out the tool instead of actually doing my work."
+    </p>
+    <div class="persona-tags">
+      <span class="tag">Non-technical</span>
+      <span class="tag">Time-strapped</span>
+      <span class="tag">Small business</span>
+      <span class="tag">Service industry</span>
+      <span class="tag">Mobile-first</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- PROBLEM SECTION -->
+<section class="problem">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2>The problem with AI today</h2>
+  </div>
+  <div class="problem-grid">
+    <div class="problem-item">
+      <span class="problem-icon">🧩</span>
+      <h3>Too many options, zero guidance</h3>
+      <p>ChatGPT, Claude, Gemini, Perplexity — each requires a different account, different interface, and different mental model. For someone who just wants help with their business, this is exhausting.</p>
+    </div>
+    <div class="problem-item">
+      <span class="problem-icon">💬</span>
+      <h3>You have to know how to ask</h3>
+      <p>"Prompt engineering" is a skill that takes practice. Non-technical users get mediocre results and assume AI isn't useful — when really, they just needed a better starting point.</p>
+    </div>
+    <div class="problem-item">
+      <span class="problem-icon">🔒</span>
+      <h3>Built for tech. Tolerated by everyone else.</h3>
+      <p>Current AI tools optimize for developers and power users. The interfaces, jargon, and defaults all assume you're comfortable in a terminal or coding environment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE PROP (dark section) -->
+<section class="value">
+  <div class="value-inner">
+    <div>
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2>What we're building instead</h2>
+      </div>
+      <ul class="value-prop-list">
+        <li>Plain-language task starters — no prompting knowledge needed. Pick a task, answer a few questions, get a great result.</li>
+        <li>One interface that handles email drafts, customer replies, quotes, and social posts — the exact jobs non-technical owners actually need.</li>
+        <li>Designed mobile-first, because your customers aren't sitting at a desk all day.</li>
+      </ul>
+    </div>
+    <div class="value-visual">
+      <div class="comparison-row">
+        <div class="comparison-box before">
+          <div class="comparison-label">Today</div>
+          Open ChatGPT → stare at blank prompt → write something → get a weird reply → give up
+        </div>
+        <div class="comparison-box after">
+          <div class="comparison-label">With SimpleAI</div>
+          Tap "write a quote email" → answer 3 questions → send a professional email in 60 seconds
+        </div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-box before">
+          <div class="comparison-label">Today</div>
+          Spend 30 minutes writing a response to a negative review
+        </div>
+        <div class="comparison-box after">
+          <div class="comparison-label">With SimpleAI</div>
+          Tap "reply to review" → done in under a minute, in your voice
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="bottom-cta" id="signup">
+  <div class="eyebrow" style="justify-content: center;">Join the waitlist</div>
+  <h2>Be first to access SimpleAI</h2>
+  <p>We're building in public and will onboard our first users in early 2025. Leave your email and we'll keep you posted — no fluff, just real updates.</p>
+  <form class="signup-form" id="bottomForm" action="https://formspree.io/f/xnnpwqkv" method="POST">
+    <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+    <button type="submit">Count me in</button>
+  </form>
+  <div class="form-success" id="bottomSuccess">✓ You're on the list — we'll be in touch soon!</div>
+  <p class="form-note" style="text-align:center;">No spam. Unsubscribe anytime.</p>
+</section>
+
+<footer>
+  <span>© 2025 SimpleAI — AI for everyone, not just developers.</span>
+  <span>Built with ❤️ in Vancouver, BC</span>
+</footer>
+
+<script>
+  // Handle both forms with AJAX
+  function handleForm(formId, successId) {
+    const form = document.getElementById(formId);
+    const success = document.getElementById(successId);
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.style.display = 'none';
+          success.classList.add('visible');
+        } else {
+          // Fallback: submit normally
+          form.submit();
+        }
+      } catch {
+        form.submit();
+      }
+    });
+  }
+
+  handleForm('heroForm', 'heroSuccess');
+  handleForm('bottomForm', 'bottomSuccess');
+
+  // Animate on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.problem-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+
+  const problemObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }, i * 120);
+        problemObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.problem-item').forEach(el => {
+    problemObserver.observe(el);
+  });
+</script>
+
+</body>
+</html>

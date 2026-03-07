@@ -79,6 +79,39 @@
 
   .nav-cta:hover { background: var(--amber); transform: translateY(-1px); }
 
+  .nav-try {
+    background: none;
+    color: var(--ink);
+    border: 1.5px solid var(--line);
+    padding: 0.55rem 1.2rem;
+    border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    text-decoration: none;
+    margin-right: 0.5rem;
+  }
+  .nav-try:hover { border-color: var(--amber); color: var(--amber); }
+
+  .nav-buttons { display: flex; align-items: center; gap: 0.5rem; }
+
+  .hero-try-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.7rem 1.5rem;
+    background: var(--amber);
+    color: #fff;
+    border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .hero-try-btn:hover { background: var(--rust); transform: translateY(-1px); }
+
   /* HERO */
   .hero {
     padding: 7rem 4rem 5rem;
@@ -505,7 +538,10 @@
 
 <nav>
   <div class="logo">Simple<span>AI</span></div>
-  <a href="#signup" class="nav-cta">Join the waitlist</a>
+  <div class="nav-buttons">
+    <a href="https://simpleai-nine.vercel.app" target="_blank" rel="noopener" class="nav-try">Try it free →</a>
+    <a href="#signup" class="nav-cta">Join the waitlist</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -522,6 +558,7 @@
     </form>
     <div class="form-success" id="heroSuccess">✓ You're on the list — we'll be in touch soon!</div>
     <p class="form-note">No spam. Unsubscribe anytime. ~200 people already signed up.</p>
+    <a href="https://simpleai-nine.vercel.app" target="_blank" rel="noopener" class="hero-try-btn">Try the tool now — it's free →</a>
   </div>
 
   <div class="persona-card">

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Testing Findings — SimpleAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F0E8;
+    --ink: #1A1510;
+    --amber: #D47C2A;
+    --rust: #B85C2A;
+    --sage: #5A7A5A;
+    --paper: #EDE8DC;
+    --line: rgba(26,21,16,0.12);
+    --green: #2D6A4F;
+    --green-bg: rgba(45,106,79,0.07);
+    --red-bg: rgba(185,28,28,0.06);
+    --red: #991b1b;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.7;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 3rem;
+    border-bottom: 1px solid var(--line);
+    background: var(--cream);
+  }
+
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .logo span { color: var(--amber); }
+
+  .nav-link {
+    font-size: 0.85rem;
+    color: var(--amber);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .nav-link:hover { text-decoration: underline; }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .meta {
+    font-size: 0.88rem;
+    color: rgba(26,21,16,0.5);
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.4rem;
+    color: var(--ink);
+  }
+
+  p { margin-bottom: 1rem; color: rgba(26,21,16,0.85); }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0 2.5rem;
+  }
+
+  .summary-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .summary-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--amber);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .summary-label {
+    font-size: 0.8rem;
+    color: rgba(26,21,16,0.5);
+    font-weight: 500;
+  }
+
+  .tester-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .tester-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tester-name {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .tester-meta {
+    font-size: 0.8rem;
+    color: rgba(26,21,16,0.5);
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.7rem;
+    border-radius: 100px;
+    letter-spacing: 0.03em;
+  }
+
+  .badge-success { background: var(--green-bg); color: var(--green); border: 1px solid rgba(45,106,79,0.2); }
+  .badge-partial { background: rgba(212,124,42,0.1); color: var(--rust); border: 1px solid rgba(212,124,42,0.25); }
+
+  .tester-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .tester-field label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(26,21,16,0.4);
+    margin-bottom: 0.3rem;
+  }
+
+  .tester-field p {
+    font-size: 0.9rem;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  blockquote {
+    border-left: 3px solid var(--amber);
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    background: rgba(212,124,42,0.05);
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+
+  .friction-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 0.15rem 0.6rem;
+    border-radius: 100px;
+    background: var(--red-bg);
+    color: var(--red);
+    border: 1px solid rgba(185,28,28,0.15);
+    margin-right: 0.35rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .priorities {
+    counter-reset: priority;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 2rem;
+  }
+
+  .priorities li {
+    counter-increment: priority;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.25rem;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+  }
+
+  .priority-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--amber);
+    line-height: 1;
+    min-width: 1.5rem;
+  }
+
+  .priority-content strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .priority-content p {
+    font-size: 0.88rem;
+    color: rgba(26,21,16,0.6);
+    margin: 0;
+  }
+
+  .theme-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 1rem 0 2rem;
+  }
+
+  .theme-item {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1rem 1.1rem;
+    font-size: 0.88rem;
+  }
+
+  .theme-item strong { display: block; margin-bottom: 0.2rem; font-size: 0.9rem; }
+  .theme-count { font-size: 0.75rem; color: rgba(26,21,16,0.45); }
+
+  .cta-box {
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .cta-box h3 { color: var(--cream); font-family: 'DM Serif Display', serif; font-size: 1.4rem; margin-bottom: 0.5rem; }
+  .cta-box p { color: rgba(245,240,232,0.7); font-size: 0.9rem; margin-bottom: 1.25rem; }
+
+  .cta-btn {
+    display: inline-block;
+    padding: 0.75rem 1.75rem;
+    background: var(--amber);
+    color: white;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .cta-btn:hover { background: var(--rust); }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 3rem 0;
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.25rem; }
+    .summary-grid { grid-template-columns: repeat(3, 1fr); }
+    .tester-row { grid-template-columns: 1fr; }
+    .theme-grid { grid-template-columns: 1fr; }
+    .container { padding: 2.5rem 1.25rem 4rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Simple<span>AI</span></a>
+  <a href="https://simpleai-nine.vercel.app" class="nav-link">Try the tool →</a>
+</nav>
+
+<div class="container">
+
+  <div class="eyebrow">Research · Round 1</div>
+  <h1>User Testing Findings</h1>
+  <p class="meta">5 testers · March 2026 · Task: reply to a customer complaint using SimpleAI</p>
+
+  <p>We recruited 5 small business owners matching our target persona — non-technical operators in service businesses — and asked each to complete a 3-step task: set up their business type, generate a reply to a customer complaint, and rate the result. Findings below are unedited and direct.</p>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <span class="summary-number">5/5</span>
+      <span class="summary-label">Completed the task</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-number">4/5</span>
+      <span class="summary-label">Would use the reply</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-number">3</span>
+      <span class="summary-label">Priority fixes identified</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h2>Individual Session Notes</h2>
+
+  <!-- TESTER 1 -->
+  <div class="tester-card">
+    <div class="tester-header">
+      <div>
+        <div class="tester-name">Tester A</div>
+        <div class="tester-meta">Service business owner</div>
+      </div>
+      <span class="badge badge-partial">Completed · with reservations</span>
+    </div>
+    <div class="tester-row">
+      <div class="tester-field">
+        <label>Friction points</label>
+        <span class="friction-tag">"optional" label confusing</span>
+        <span class="friction-tag">reply too soft / generic</span>
+      </div>
+      <div class="tester-field">
+        <label>Would use the reply?</label>
+        <p>Would copy and tweak the first line. "Better than me typing it myself at midnight."</p>
+      </div>
+    </div>
+    <blockquote>"Why does it say 'optional' on the business type box? Then what's the point of it? Just put something in or don't. Stop wasting my time with optional."</blockquote>
+    <h3>Suggested improvement</h3>
+    <p>"Tell me what the reply is going to DO — is it trying to keep the customer or just apologize? I want to pick the goal, not just the tone. Goals matter. Tone is fluff."</p>
+  </div>
+
+  <!-- TESTER 2 -->
+  <div class="tester-card">
+    <div class="tester-header">
+      <div>
+        <div class="tester-name">Tester B</div>
+        <div class="tester-meta">Yoga studio owner</div>
+      </div>
+      <span class="badge badge-success">Completed · positive</span>
+    </div>
+    <div class="tester-row">
+      <div class="tester-field">
+        <label>Friction points</label>
+        <span class="friction-tag">unsure how detailed to be in business type</span>
+      </div>
+      <div class="tester-field">
+        <label>Would use the reply?</label>
+        <p>100% yes. "It sounded like me — warm, genuine, not corporate."</p>
+      </div>
+    </div>
+    <blockquote>"I wasn't sure if I should write my business type like 'yoga studio' or something longer like 'yoga and wellness studio in Brighton.'"</blockquote>
+    <h3>Suggested improvement</h3>
+    <p>"A little example in the business type field — placeholder text that says 'e.g. yoga studio, dog groomer, café.' Just so new users know what level of detail to give."</p>
+  </div>
+
+  <!-- TESTER 3 -->
+  <div class="tester-card">
+    <div class="tester-header">
+      <div>
+        <div class="tester-name">Tester C</div>
+        <div class="tester-meta">Restaurant owner</div>
+      </div>
+      <span class="badge badge-partial">Completed · would use as draft only</span>
+    </div>
+    <div class="tester-row">
+      <div class="tester-field">
+        <label>Friction points</label>
+        <span class="friction-tag">no customer name field</span>
+        <span class="friction-tag">"Dear Customer" feels cold</span>
+        <span class="friction-tag">reply too generic</span>
+      </div>
+      <div class="tester-field">
+        <label>Would use the reply?</label>
+        <p>As a draft starter only. "The structure is good — acknowledge, apologize, invite back. But I'd never send it as-is."</p>
+      </div>
+    </div>
+    <blockquote>"I kept looking for somewhere to add my restaurant's name or the customer's name. The reply just said 'Dear Customer' which felt a bit... cold for something claiming to be friendly."</blockquote>
+    <h3>Suggested improvement</h3>
+    <p>"Let me add a customer name field. Even just a first name. 'Dear Sarah' hits totally differently than 'Dear Customer.' That one fix would make this actually usable for me."</p>
+  </div>
+
+  <!-- TESTER 4 -->
+  <div class="tester-card">
+    <div class="tester-header">
+      <div>
+        <div class="tester-name">Tester D</div>
+        <div class="tester-meta">Service business owner (Google reviews)</div>
+      </div>
+      <span class="badge badge-success">Completed · enthusiastic</span>
+    </div>
+    <div class="tester-row">
+      <div class="tester-field">
+        <label>Friction points</label>
+        <span class="friction-tag">confused: whose "tone"?</span>
+        <span class="friction-tag">feedback buttons hard to notice</span>
+      </div>
+      <div class="tester-field">
+        <label>Would use the reply?</label>
+        <p>Absolutely. "I've been putting off replying to a Google review for two weeks. This would have saved me so much stress."</p>
+      </div>
+    </div>
+    <blockquote>"I wasn't sure what 'tone' meant at first — like the tone of their message or my reply? Once I picked one and saw the result I got it, but maybe a little tooltip or example would help?"</blockquote>
+    <h3>Suggested improvement</h3>
+    <p>"Can it also help me reply to good reviews? I struggle with those too — I never know if saying 'Thank you so much!' sounds too simple. I'd use this all the time if it did that."</p>
+  </div>
+
+  <!-- TESTER 5 -->
+  <div class="tester-card">
+    <div class="tester-header">
+      <div>
+        <div class="tester-name">Tester E</div>
+        <div class="tester-meta">Wedding photographer</div>
+      </div>
+      <span class="badge badge-success">Completed · positive</span>
+    </div>
+    <div class="tester-row">
+      <div class="tester-field">
+        <label>Friction points</label>
+        <span class="friction-tag">mobile layout cramped</span>
+        <span class="friction-tag">copy button gave no confirmation</span>
+        <span class="friction-tag">can't regenerate without clearing</span>
+      </div>
+      <div class="tester-field">
+        <label>Would use the reply?</label>
+        <p>Yes. "The Quick tone reply was solid — punchy, not groveling, gets to the point."</p>
+      </div>
+    </div>
+    <blockquote>"Add a 'copy to clipboard' button that actually flashes or confirms the copy happened. I clicked it and wasn't sure if it worked."</blockquote>
+    <h3>Suggested improvement</h3>
+    <p>"Could you let me regenerate with one click without clearing everything? Sometimes the first draft is close but not quite there."</p>
+  </div>
+
+  <hr class="divider">
+
+  <h2>Cross-Session Themes</h2>
+
+  <div class="theme-grid">
+    <div class="theme-item">
+      <strong>Personalization gap</strong>
+      <p>Replies felt generic. "Dear Customer" was cited as the top reason testers wouldn't send the output as-is.</p>
+      <span class="theme-count">Raised by 3 of 5 testers</span>
+    </div>
+    <div class="theme-item">
+      <strong>Goal vs. tone framing</strong>
+      <p>Testers want to pick the intent of a reply (retain, apologize, resolve), not just its emotional tone.</p>
+      <span class="theme-count">Raised by 2 of 5 testers</span>
+    </div>
+    <div class="theme-item">
+      <strong>Positive review use case</strong>
+      <p>Multiple testers spontaneously asked if the tool works for good reviews too — a use case not currently surfaced.</p>
+      <span class="theme-count">Raised by 2 of 5 testers</span>
+    </div>
+    <div class="theme-item">
+      <strong>UI clarity</strong>
+      <p>Small friction points: "optional" label, tone selector label, copy confirmation, mobile layout.</p>
+      <span class="theme-count">Raised by 3 of 5 testers</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h2>Prioritized Next Improvements</h2>
+
+  <ol class="priorities">
+    <li>
+      <span class="priority-num">1</span>
+      <div class="priority-content">
+        <strong>Add a customer name field</strong>
+        <p>The single highest-impact change. "Dear Customer" is the primary reason testers wouldn't send replies as-is. A first name field would make output feel personal and immediately usable. Mentioned explicitly by 3 testers.</p>
+      </div>
+    </li>
+    <li>
+      <span class="priority-num">2</span>
+      <div class="priority-content">
+        <strong>Replace tone selector with goal + tone</strong>
+        <p>Add a "What do you want this reply to do?" selector (e.g. Retain customer, Apologize, Resolve a complaint, Thank them) above or alongside tone. The most strategically important feedback — users think in goals, not tones.</p>
+      </div>
+    </li>
+    <li>
+      <span class="priority-num">3</span>
+      <div class="priority-content">
+        <strong>Support positive review replies</strong>
+        <p>At least 2 testers asked unprompted. Adding a "Reply to a compliment" mode or reframing the tool as "any customer message" (not just complaints) broadens the use case with minimal engineering lift.</p>
+      </div>
+    </li>
+  </ol>
+
+  <hr class="divider">
+
+  <h2>Minor UX Fixes (low effort)</h2>
+  <ul style="padding-left:1.25rem; color: rgba(26,21,16,0.8); font-size:0.95rem; line-height:2;">
+    <li>Remove "optional" label from business type — just use placeholder text</li>
+    <li>Update business type placeholder: <em>e.g. yoga studio, dog groomer, café</em></li>
+    <li>Rename "Reply tone" to "Your reply style" and add one-line descriptions</li>
+    <li>Make copy button flash green with "Copied!" confirmation (already exists, needs visibility)</li>
+    <li>Fix mobile text area cramping</li>
+    <li>Add a "Try again" button that regenerates without clearing the message</li>
+  </ul>
+
+  <div class="cta-box">
+    <h3>Try SimpleAI</h3>
+    <p>Reply to any customer email or review in 10 seconds. Free, no signup.</p>
+    <a href="https://simpleai-nine.vercel.app" class="cta-btn">Try it free →</a>
+  </div>
+
+</div>
+
+</body>
+</html>

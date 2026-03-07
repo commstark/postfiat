@@ -1,1 +1,1 @@
-{"rewrites":[{"source":"/findings","destination":"/findings.html"},{"source":"/roadmap","destination":"/roadmap.html"},{"source":"/blog","destination":"/blog.html"},{"source":"/(.*)","destination":"/index.html"}]}
+{"rewrites":[{"source":"/findings","destination":"/findings.html"},{"source":"/roadmap","destination":"/roadmap.html"},{"source":"/blog","destination":"/blog.html"},{"source":"/learn","destination":"/learn/index.html"},{"source":"/learn/(.*)","destination":"/learn/$1.html"},{"source":"/(.*)","destination":"/index.html"}]}

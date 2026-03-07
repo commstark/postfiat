@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I built an AI tool for the people AI forgot — SimpleAI</title>
+<meta name="description" content="Most AI tools were built for developers. I built one for the small business owner who's been putting off replying to a Google review for two weeks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F0E8;
+    --ink: #1A1510;
+    --amber: #D47C2A;
+    --rust: #B85C2A;
+    --line: rgba(26,21,16,0.12);
+    --muted: rgba(26,21,16,0.55);
+    --green: #2D6A4F;
+    --green-bg: rgba(45,106,79,0.07);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.75;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 3rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .logo { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--ink); text-decoration: none; }
+  .logo span { color: var(--amber); }
+  .nav-link { font-size: 0.85rem; color: var(--amber); text-decoration: none; font-weight: 500; }
+  .nav-link:hover { text-decoration: underline; }
+
+  .post-header {
+    max-width: 720px;
+    margin: 4rem auto 0;
+    padding: 0 2rem;
+  }
+
+  .post-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.25rem;
+    color: var(--ink);
+  }
+
+  .post-meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .post-body {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  .post-body p {
+    margin-bottom: 1.5rem;
+    color: rgba(26,21,16,0.88);
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.65rem;
+    letter-spacing: -0.015em;
+    margin: 2.75rem 0 1rem;
+    color: var(--ink);
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1.75rem 0 0.5rem;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--amber);
+    padding: 0.85rem 1.25rem;
+    margin: 1.75rem 0;
+    background: rgba(212,124,42,0.05);
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink);
+  }
+
+  blockquote cite {
+    display: block;
+    font-style: normal;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+  }
+
+  /* TOOL MOCKUP */
+  .tool-mockup {
+    margin: 2.5rem 0;
+    background: #FAFAF7;
+    border: 1px solid rgba(28,25,23,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  }
+
+  .mockup-bar {
+    background: white;
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid rgba(28,25,23,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mockup-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+  .mockup-logo span { color: var(--amber); }
+  .mockup-badge { font-size: 0.7rem; font-weight: 500; background: rgba(201,106,26,0.08); border: 1px solid rgba(201,106,26,0.25); color: var(--amber); padding: 0.2rem 0.6rem; border-radius: 100px; }
+
+  .mockup-body { padding: 1.5rem; }
+
+  .mockup-section {
+    background: white;
+    border: 1px solid rgba(28,25,23,0.09);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .mockup-row {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid rgba(28,25,23,0.07);
+  }
+  .mockup-row:last-child { border-bottom: none; }
+
+  .mockup-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(28,25,23,0.4); margin-bottom: 0.5rem; }
+
+  .mockup-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .mockup-input { background: #FAFAF7; border: 1.5px solid rgba(28,25,23,0.1); border-radius: 5px; padding: 0.5rem 0.7rem; font-size: 0.82rem; color: rgba(28,25,23,0.4); font-family: 'DM Sans', sans-serif; }
+
+  .mockup-goals { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.4rem; }
+  .mockup-goal { border: 1.5px solid rgba(28,25,23,0.1); border-radius: 5px; padding: 0.5rem 0.3rem; text-align: center; font-size: 0.72rem; background: #FAFAF7; }
+  .mockup-goal.active { border-color: var(--amber); background: rgba(201,106,26,0.08); }
+  .mockup-goal-emoji { font-size: 0.95rem; display: block; margin-bottom: 0.1rem; }
+  .mockup-goal-name { font-weight: 500; color: #1C1917; font-size: 0.7rem; }
+
+  .mockup-textarea { background: #FAFAF7; border: 1.5px solid rgba(28,25,23,0.1); border-radius: 5px; padding: 0.65rem 0.75rem; font-size: 0.82rem; color: rgba(28,25,23,0.75); font-family: 'DM Sans', sans-serif; line-height: 1.5; min-height: 80px; width: 100%; }
+
+  .mockup-btn { width: 100%; padding: 0.75rem; background: #1C1917; color: white; border: none; border-radius: 5px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500; text-align: center; }
+
+  .mockup-reply { background: rgba(45,106,79,0.07); border: 1px solid rgba(45,106,79,0.18); border-radius: 6px; padding: 1rem; font-size: 0.85rem; line-height: 1.65; color: #1C1917; margin-top: 0.75rem; font-family: 'DM Sans', sans-serif; }
+
+  .mockup-caption { text-align: center; font-size: 0.78rem; color: var(--muted); padding: 0.75rem; background: white; border-top: 1px solid rgba(28,25,23,0.07); }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .stat-box {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1.1rem 1rem;
+    text-align: center;
+  }
+
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--amber); display: block; line-height: 1; margin-bottom: 0.25rem; }
+  .stat-label { font-size: 0.78rem; color: var(--muted); }
+
+  /* CTA */
+  .cta-box {
+    background: var(--ink);
+    color: white;
+    border-radius: 10px;
+    padding: 2.25rem 2rem;
+    text-align: center;
+    margin: 3rem 0 1.5rem;
+  }
+
+  .cta-box h3 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: white; margin-bottom: 0.5rem; }
+  .cta-box p { color: rgba(255,255,255,0.6); font-size: 0.92rem; margin-bottom: 1.25rem; }
+
+  .cta-buttons { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+  .cta-primary {
+    display: inline-block;
+    padding: 0.75rem 1.75rem;
+    background: var(--amber);
+    color: white;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .cta-primary:hover { background: var(--rust); }
+
+  .cta-secondary {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: none;
+    color: rgba(255,255,255,0.7);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .cta-secondary:hover { border-color: rgba(255,255,255,0.5); color: white; }
+
+  .share-note {
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 0.75rem;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  footer a { color: var(--amber); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.25rem; }
+    .post-header, .post-body { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .mockup-inputs { grid-template-columns: 1fr; }
+    .mockup-goals { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Simple<span>AI</span></a>
+  <a href="https://simpleai-nine.vercel.app" class="nav-link">Try it free →</a>
+</nav>
+
+<div class="post-header">
+  <div class="post-eyebrow">Launch · March 2026</div>
+  <h1>I built an AI tool for the people AI forgot</h1>
+  <div class="post-meta">
+    <span>8 min read</span>
+    <span>·</span>
+    <span>SimpleAI team</span>
+    <span>·</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+<div class="post-body">
+
+  <p>Every week I see another breathless article about how AI is transforming business. The demos are impressive. The case studies are from Goldman Sachs and Google. And somewhere, a 58-year-old woman who owns a cleaning company in Victoria, BC is still typing out the same apologetic reply to the same kind of complaint she gets every month — at midnight, because that's the only time she has.</p>
+
+  <p>She has heard about AI. She's curious about it. She tried ChatGPT once and spent 45 minutes figuring out how to phrase a prompt before giving up and writing the email herself. "I kept hearing AI can write emails and handle customer questions," she told me, "but every time I try it, I spend an hour figuring out the tool instead of actually doing my work."</p>
+
+  <p>She is exactly who I built SimpleAI for.</p>
+
+  <h2>The problem nobody talks about</h2>
+
+  <p>AI has an accessibility problem — and it's not the kind that gets fixed with a bigger font or a screen reader. It's a design problem. The interfaces, jargon, and defaults of mainstream AI tools assume you're comfortable with prompting, iteration, and technical abstraction. They were built by developers, for developers, with everyone else treated as an afterthought.</p>
+
+  <p>The result is a growing gap. Tech-savvy users are getting dramatically more productive. Everyone else is watching from the outside, occasionally trying a tool, failing to get value fast enough, and going back to doing things manually. That's not democratisation. That's a new kind of inequality dressed up in a press release.</p>
+
+  <p>Small business owners are one of the most underserved groups in this gap. They have genuine, repetitive, high-stakes communication tasks — customer complaints, negative reviews, billing disputes, thank-you replies — that AI could handle in seconds. But they don't have an hour to learn a new tool. They have 10 minutes between jobs.</p>
+
+  <h2>What SimpleAI does</h2>
+
+  <p>SimpleAI is a single-purpose AI tool that writes professional customer replies in seconds. You paste a message, pick what you want the reply to accomplish, and get a ready-to-send response. No prompts. No configuration. No tech skills required.</p>
+
+  <p>Here's what it looks like in practice:</p>
+
+  <!-- TOOL MOCKUP -->
+  <div class="tool-mockup">
+    <div class="mockup-bar">
+      <div class="mockup-logo">Simple<span>AI</span></div>
+      <span class="mockup-badge">Free · No signup</span>
+    </div>
+    <div class="mockup-body">
+      <div class="mockup-section">
+        <div class="mockup-row">
+          <div class="mockup-label">About this message</div>
+          <div class="mockup-inputs">
+            <div class="mockup-input">cleaning company</div>
+            <div class="mockup-input">Sarah</div>
+          </div>
+        </div>
+        <div class="mockup-row">
+          <div class="mockup-label">What should this reply do?</div>
+          <div class="mockup-goals">
+            <div class="mockup-goal active"><span class="mockup-goal-emoji">🎯</span><span class="mockup-goal-name">Win them back</span></div>
+            <div class="mockup-goal"><span class="mockup-goal-emoji">🙏</span><span class="mockup-goal-name">Own the mistake</span></div>
+            <div class="mockup-goal"><span class="mockup-goal-emoji">⚡</span><span class="mockup-goal-name">Resolve it fast</span></div>
+            <div class="mockup-goal"><span class="mockup-goal-emoji">✨</span><span class="mockup-goal-name">Say thanks</span></div>
+          </div>
+        </div>
+        <div class="mockup-row">
+          <div class="mockup-label">Customer message</div>
+          <div class="mockup-textarea">"Hi, I just wanted to say I was really disappointed with my last visit. I waited 20 minutes past my appointment time and nobody apologized. I'm not sure I'll be coming back."</div>
+        </div>
+        <div class="mockup-row">
+          <div class="mockup-btn">✍️ Write my reply</div>
+          <div class="mockup-reply">Hi Sarah,<br><br>Thank you for taking the time to share this with us — I'm truly sorry about the wait and the lack of acknowledgment from our team. That's not the experience we want for you, and I completely understand your frustration.<br><br>I'd love the chance to make it right. Please reach out directly and I'll personally ensure your next visit goes smoothly — on us.<br><br>Warm regards,<br>The Team at Coastal Cleaning Co.</div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-caption">SimpleAI — simpleai-nine.vercel.app — free, no account required</div>
+  </div>
+
+  <p>That reply took 4 seconds. It addresses the customer by name, acknowledges the specific complaint, and offers a concrete path to resolution. More importantly, it took zero knowledge of AI to produce. The business owner picked "Win them back," pasted the message, and clicked a button.</p>
+
+  <h2>What we learned from 5 real users</h2>
+
+  <p>Before shipping anything publicly, we ran structured user tests with five small business owners — a yoga studio, a restaurant, a cleaning company, a wedding photographer, and a service business owner dealing with Google reviews. We gave each person the same 3-step task and watched what happened.</p>
+
+  <div class="stats-row">
+    <div class="stat-box"><span class="stat-num">5/5</span><span class="stat-label">Completed the task</span></div>
+    <div class="stat-box"><span class="stat-num">4/5</span><span class="stat-label">Would use the output</span></div>
+    <div class="stat-box"><span class="stat-num">3</span><span class="stat-label">Major improvements shipped from feedback</span></div>
+  </div>
+
+  <p>The headline finding was encouraging — every tester completed the task without help. But the details were more interesting than the completion rate.</p>
+
+  <h3>Finding 1: Goals, not tone</h3>
+
+  <p>The original tool had a "tone" selector — Friendly, Professional, Apologetic, Quick. One tester immediately pushed back:</p>
+
+  <blockquote>"Tell me what the reply is going to DO — is it trying to keep the customer or just apologize? I want to pick the goal, not just the tone. Goals matter. Tone is fluff."<cite>— Tester A, service business owner</cite></blockquote>
+
+  <p>She was right. Small business owners think in outcomes, not prose styles. We redesigned the selector entirely — it now asks "What should this reply do?" with options like "Win them back" and "Resolve it fast." The AI maps each goal to an appropriate intent and tone internally. Users never have to think about it.</p>
+
+  <h3>Finding 2: "Dear Customer" is a dealbreaker</h3>
+
+  <p>Three of five testers flagged the generic greeting as the primary reason they wouldn't send the reply as-is. The restaurant owner put it plainly:</p>
+
+  <blockquote>"'Dear Customer' hits totally differently than 'Dear Sarah.' That one fix would make this actually usable for me."<cite>— Tester C, restaurant owner</cite></blockquote>
+
+  <p>We added a customer name field. It's optional — anonymous Google reviews don't have names — but when filled in, the reply opens with a personalised greeting. A small change with outsized impact on perceived quality.</p>
+
+  <h3>Finding 3: Positive reviews are just as hard</h3>
+
+  <p>We built SimpleAI assuming people mostly struggle with complaints. Two testers set us straight:</p>
+
+  <blockquote>"Can it also help me reply to good reviews? I never know if saying 'Thank you so much!' sounds too simple. I'd use this all the time if it did that."<cite>— Tester D, service business owner</cite></blockquote>
+
+  <p>We added a "Say thanks" goal specifically for positive reviews and compliments. The tool now handles the full range of customer communication, not just damage control.</p>
+
+  <h3>The tester who gave us the most hope</h3>
+
+  <p>One tester had been putting off replying to a Google review for two weeks. She said she didn't know what to write and kept procrastinating. After using the tool for five minutes, she said it would have saved her "so much stress." That's the use case in one sentence. The problem isn't that small business owners don't care about their customers — it's that the blank page is genuinely hard, and life is genuinely busy.</p>
+
+  <h2>What we're building next</h2>
+
+  <p>The three-month roadmap focuses on closing the remaining gaps our testers identified: direct platform connections (so you don't have to copy-paste from Google Reviews), brand voice learning (so replies sound like you, not a corporate template), and reply history and templates (so the tool gets more useful the more you use it).</p>
+
+  <p>Every feature on the roadmap is grounded in direct user feedback. We're not guessing. <a href="/roadmap" style="color: var(--amber);">You can read the full roadmap here.</a></p>
+
+  <h2>Try it</h2>
+
+  <p>SimpleAI is live, free, and requires no account. If you own a small business, or know someone who does, paste any customer message and see what comes back. It takes 30 seconds.</p>
+
+  <p>If it's useful, the feedback widget in the tool goes directly to us. If it's not, we want to know that too.</p>
+
+  <div class="cta-box">
+    <h3>Try SimpleAI — free, no signup</h3>
+    <p>Reply to any customer email or review in 10 seconds.</p>
+    <div class="cta-buttons">
+      <a href="https://simpleai-nine.vercel.app" class="cta-primary">Try the tool →</a>
+      <a href="/roadmap" class="cta-secondary">Read the roadmap</a>
+    </div>
+  </div>
+
+  <p class="share-note">Read our <a href="/findings">full user testing report</a> · Built with Claude AI by Anthropic</p>
+
+</div>
+
+<footer>
+  <span>© 2026 SimpleAI · <a href="/">Home</a> · <a href="/findings">User Testing Report</a> · <a href="/roadmap">Roadmap</a></span>
+</footer>
+
+</body>
+</html>

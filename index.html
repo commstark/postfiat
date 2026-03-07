@@ -663,7 +663,8 @@
 </footer>
 
 <script>
-  // Handle both forms with AJAX
+  const SUBSCRIBE_URL = 'https://simpleai-nine.vercel.app/api/subscribe';
+
   function handleForm(formId, successId) {
     const form = document.getElementById(formId);
     const success = document.getElementById(successId);
@@ -671,18 +672,17 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const data = new FormData(form);
+      const email = form.querySelector('input[type="email"]').value;
       try {
-        const res = await fetch(form.action, {
+        const res = await fetch(SUBSCRIBE_URL, {
           method: 'POST',
-          body: data,
-          headers: { 'Accept': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
         });
         if (res.ok) {
           form.style.display = 'none';
           success.classList.add('visible');
         } else {
-          // Fallback: submit normally
           form.submit();
         }
       } catch {
